@@ -1,6 +1,6 @@
 using eAgenda.WebApp.Compartilhado.Dominio;
 
-namespace eAgenda.WebApp.Modulos.ModuloCategorias.Dominio;
+namespace eAgenda.WebApp.Modulos.ModuloCategoria.Dominio;
 
 public class Categoria : EntidadeBase<Categoria>
 {

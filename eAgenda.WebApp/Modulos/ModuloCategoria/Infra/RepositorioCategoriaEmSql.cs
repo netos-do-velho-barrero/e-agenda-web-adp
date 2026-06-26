@@ -1,9 +1,9 @@
 using Dapper;
 using eAgenda.WebApp.Compartilhado.Infra.Sql;
-using eAgenda.WebApp.Modulos.ModuloCategorias.Dominio;
+using eAgenda.WebApp.Modulos.ModuloCategoria.Dominio;
 using Microsoft.Data.SqlClient;
 
-namespace eAgenda.WebApp.Modulos.ModuloCategorias.Infra;
+namespace eAgenda.WebApp.Modulos.ModuloCategoria.Infra;
 
 public sealed class RepositorioCategoriaEmSql(ISqlConnectionFactory connectionFactory) : IRepositorioCategoria
 {
