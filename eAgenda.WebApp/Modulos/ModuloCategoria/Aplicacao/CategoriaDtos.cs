@@ -1,7 +1,7 @@
+using eAgenda.WebApp.Modulos.ModuloCategoria.Dominio;
+namespace eAgenda.WebApp.Modulos.ModuloCategoria.Aplicacao;
 
-namespace eAgenda.WebApp.Modulos.ModuloCategorias.Aplicacao;
-
-public record ListarCategoriasDto(
+public record ListarCategoriaDto(
     Guid Id,
     string Titulo
     );
@@ -11,11 +11,11 @@ public record CadastrarCategoriaDto(
     );
 
 public record EditarCategoriaDto(
-    Guid Id, 
+    Guid Id,
     string Titulo
     );
 
 public record DetalhesCategoriaDto(
-    Guid Id, 
+    Guid Id,
     string Titulo
 );

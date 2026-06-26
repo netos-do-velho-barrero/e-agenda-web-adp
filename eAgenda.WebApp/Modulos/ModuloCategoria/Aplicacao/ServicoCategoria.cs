@@ -1,7 +1,8 @@
 using FluentResults;
-using eAgenda.WebApp.Modulos.ModuloCategorias.Dominio;
 
-namespace eAgenda.WebApp.Modulos.ModuloCategorias.Aplicacao;
+using eAgenda.WebApp.Modulos.ModuloCategoria.Dominio;
+
+namespace eAgenda.WebApp.Modulos.ModuloCategoria.Aplicacao;
 
 public class ServicoCategoria
 {
@@ -62,11 +63,11 @@ public class ServicoCategoria
         return Result.Ok();
     }
 
-    public List<ListarCategoriasDto> SelecionarTodos()
+    public List<ListarCategoriaDto> SelecionarTodos()
     {
         return repositorioCategoria
             .SelecionarTodos()
-            .Select(c => new ListarCategoriasDto(c.Id, c.Titulo))
+            .Select(c => new ListarCategoriaDto(c.Id, c.Titulo))
             .ToList();
     }
 
