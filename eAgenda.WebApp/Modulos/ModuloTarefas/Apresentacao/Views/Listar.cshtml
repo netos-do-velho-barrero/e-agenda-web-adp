@@ -1,0 +1,77 @@
+@{
+    Layout = "_Layout";
+    ViewBag.Titulo = "Listagem de Tarefas";
+}
+
+@model List<ListarTarefasViewModel>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fs-3 text-primary fw-semibold">@ViewBag.Titulo</h1>
+
+    <a class="btn btn-primary rounded-pill px-4" asp-action="Cadastrar">
+        Cadastrar
+    </a>
+</div>
+
+@if (TempData["MensagemErro"] is string mensagemErro)
+{
+    <div class="alert alert-danger">@mensagemErro</div>
+}
+
+<div class="d-flex flex-wrap gap-2 mb-4">
+    <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar">Todas</a>
+    <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar" asp-route-filtro="pendentes">Pendentes</a>
+    <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar"
+       asp-route-filtro="concluidas">Concluidas</a>
+    <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar" asp-route-filtro="prioridade"
+       asp-route-prioridade="Alta">Alta</a>
+    <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar" asp-route-filtro="prioridade"
+       asp-route-prioridade="Normal">Normal</a>
+    <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar" asp-route-filtro="prioridade"
+       asp-route-prioridade="Baixa">Baixa</a>
+</div>
+
+<div class="card border-primary-subtle shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary">
+                <tr>
+                    <th>Titulo</th>
+                    <th>Prioridade</th>
+                    <th>Status</th>
+                    <th>Percentual</th>
+                    <th class="text-end">Acoes</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var tarefa in Model)
+                {
+                    <tr>
+                        <td>@tarefa.Titulo</td>
+                        <td>@tarefa.Prioridade</td>
+                        <td>@(tarefa.Concluida ? "Concluida" : "Pendente")</td>
+                        <td>
+                            <div class="progress" style="height: 22px;">
+                                <div class="progress-bar" style="width: @tarefa.PercentualConcluido%">
+                                    @tarefa.PercentualConcluido.ToString("0")%
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-end">
+                            <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="Editar"
+                               asp-route-id="@tarefa.Id">
+                                Editar
+                            </a>
+
+                            <a class="btn btn-outline-danger btn-sm rounded-pill px-3" asp-action="Excluir"
+                               asp-route-id="@tarefa.Id">
+                                Excluir
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
