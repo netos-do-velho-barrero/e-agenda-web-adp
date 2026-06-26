@@ -42,9 +42,9 @@ CREATE TABLE [dbo].[TBDespesa]
 
 CREATE TABLE [dbo].[TBDespesaCategoria]
 (
-    [DespesaId     ] uniqueidentifier NOT NULL,
+    [DespesaId] uniqueidentifier NOT NULL,
     [CategoriaId] uniqueidentifier NOT NULL,
-    PRIMARY KEY ([DespesaId     ], [CategoriaId])
+    PRIMARY KEY ([DespesaId], [CategoriaId])
 );
 
 CREATE TABLE [dbo].[TBTarefa]

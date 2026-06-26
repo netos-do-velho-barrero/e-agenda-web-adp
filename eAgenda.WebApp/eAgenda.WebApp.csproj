@@ -14,7 +14,6 @@
     <Folder Include="Compartilhado\Apresentacao\Views\" />
     <Folder Include="Compartilhado\Dominio\" />
     <Folder Include="Compartilhado\Infra\" />
-    <Folder Include="Modulos\" />
     <Folder Include="Modulos\ModuloCategorias\" />
     <Folder Include="Modulos\ModuloCategorias\Aplicacao\" />
     <Folder Include="Modulos\ModuloCategorias\Apresentacao\" />
@@ -30,16 +29,20 @@
     <Folder Include="Modulos\ModuloContatos\Apresentacao\" />
     <Folder Include="Modulos\ModuloContatos\Dominio\" />
     <Folder Include="Modulos\ModuloContatos\Infra\" />
-    <Folder Include="Modulos\ModuloDespesas\" />
     <Folder Include="Modulos\ModuloDespesas\Aplicacao\" />
     <Folder Include="Modulos\ModuloDespesas\Apresentacao\" />
-    <Folder Include="Modulos\ModuloDespesas\Dominio\" />
     <Folder Include="Modulos\ModuloDespesas\Infra\" />
     <Folder Include="Modulos\ModuloTarefas\" />
     <Folder Include="Modulos\ModuloTarefas\Aplicacao\" />
     <Folder Include="Modulos\ModuloTarefas\Apresentacao\" />
     <Folder Include="Modulos\ModuloTarefas\Dominio\" />
     <Folder Include="Modulos\ModuloTarefas\Infra\" />
+  </ItemGroup>
+
+ <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.79" />
+    <PackageReference Include="FluentResults" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.1" />
   </ItemGroup>
 
 </Project>
