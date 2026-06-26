@@ -1,0 +1,55 @@
+@{
+    Layout = "_Layout";
+    ViewBag.Titulo = "Listagem de Contatos";
+}
+
+@model List<ListarContatosViewModel>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fs-3 text-primary fw-semibold">@ViewBag.Titulo</h1>
+
+    <a class="btn btn-primary rounded-pill px-4" asp-action="Cadastrar">
+        Cadastrar
+    </a>
+</div>
+
+@if (TempData["MensagemErro"] is string mensagemErro)
+{
+    <div class="alert alert-danger">@mensagemErro</div>
+}
+
+<div class="card border-primary-subtle shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary">
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th class="text-end">Acoes</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var contato in Model)
+                {
+                    <tr>
+                        <td>@contato.Nome</td>
+                        <td>@contato.Email</td>
+                        <td>@contato.Telefone</td>
+                        <td class="text-end">
+                            <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="Editar"
+                               asp-route-id="@contato.Id">
+                                Editar
+                            </a>
+
+                            <a class="btn btn-outline-danger btn-sm rounded-pill px-3" asp-action="Excluir"
+                               asp-route-id="@contato.Id">
+                                Excluir
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
