@@ -33,7 +33,7 @@ public class Contato : EntidadeBase<Contato>
             erros.Add("O campo \"Email\" deve conter um email valido.");
 
         if (!Regex.IsMatch(Telefone, @"^\(\d{2}\) \d{4,5}-\d{4}$"))
-            erros.Add("O campo \"Telefone\" deve estar no formato (DDD) 90000-0000.");
+            erros.Add("O campo \"Telefone\" deve estar no formato (XX) XXXX-XXXX ou (XX) XXXXX-XXXX.");
 
         return erros;
     }

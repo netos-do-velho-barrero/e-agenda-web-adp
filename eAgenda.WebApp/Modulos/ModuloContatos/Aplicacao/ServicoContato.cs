@@ -20,7 +20,7 @@ public class ServicoContato
         if (repositorioContato.ExisteTelefone(dto.Telefone))
             return Falha(nameof(dto.Telefone), "Ja existe um contato com este telefone.");
 
-        Contato contato = new Contato(dto.Nome, dto.Email, dto.Telefone, dto.Cargo, dto.Empresa);
+        Contato contato = new(dto.Nome, dto.Email, dto.Telefone, dto.Cargo, dto.Empresa);
 
         Result resultadoValidacao = ValidarEntidade(contato);
 
@@ -40,7 +40,7 @@ public class ServicoContato
         if (repositorioContato.ExisteTelefone(dto.Telefone, dto.Id))
             return Falha(nameof(dto.Telefone), "Ja existe um contato com este telefone.");
 
-        Contato contato = new Contato(dto.Nome, dto.Email, dto.Telefone, dto.Cargo, dto.Empresa);
+        Contato contato = new(dto.Nome, dto.Email, dto.Telefone, dto.Cargo, dto.Empresa);
 
         Result resultadoValidacao = ValidarEntidade(contato);
 

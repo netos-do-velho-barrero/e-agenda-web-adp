@@ -21,10 +21,10 @@
         <dd class="col-sm-9">@Model.Telefone</dd>
 
         <dt class="col-sm-3 text-primary">Cargo</dt>
-        <dd class="col-sm-9">@Model.Cargo</dd>
+        <dd class="col-sm-9">@(Model.Cargo ?? "-")</dd>
 
         <dt class="col-sm-3 text-primary">Empresa</dt>
-        <dd class="col-sm-9">@Model.Empresa</dd>
+        <dd class="col-sm-9">@(Model.Empresa ?? "-")</dd>
     </dl>
 
     <div class="d-flex justify-content-end gap-2 mt-4">

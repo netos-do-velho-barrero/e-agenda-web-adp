@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eAgenda.WebApp.Modulos.ModuloContatos.Apresentacao;
 
-public class ContatoController : Controller
+public class ContatosController : Controller
 {
     private readonly ServicoContato servicoContato;
     private readonly IMapper mapeador;
 
-    public ContatoController(ServicoContato servicoContato, IMapper mapeador)
+    public ContatosController(ServicoContato servicoContato, IMapper mapeador)
     {
         this.servicoContato = servicoContato;
         this.mapeador = mapeador;
