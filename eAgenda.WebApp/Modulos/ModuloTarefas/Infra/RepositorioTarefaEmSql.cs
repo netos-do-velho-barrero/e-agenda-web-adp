@@ -10,6 +10,7 @@ public sealed class RepositorioTarefaEmSql(ISqlConnectionFactory connectionFacto
     public void Cadastrar(Tarefa entidade)
     {
         using SqlConnection conexao = connectionFactory.CreateConnection();
+
         conexao.Open();
 
         using SqlTransaction transacao = conexao.BeginTransaction();
@@ -22,6 +23,7 @@ public sealed class RepositorioTarefaEmSql(ISqlConnectionFactory connectionFacto
         """;
 
         conexao.Execute(tarefaSql, entidade, transacao);
+
         InserirItens(conexao, transacao, entidade.Id, entidade.Itens);
 
         transacao.Commit();
@@ -32,6 +34,7 @@ public sealed class RepositorioTarefaEmSql(ISqlConnectionFactory connectionFacto
         entidadeAtualizada.Id = idSelecionado;
 
         using SqlConnection conexao = connectionFactory.CreateConnection();
+
         conexao.Open();
 
         using SqlTransaction transacao = conexao.BeginTransaction();
@@ -54,7 +57,12 @@ public sealed class RepositorioTarefaEmSql(ISqlConnectionFactory connectionFacto
             return false;
         }
 
-        conexao.Execute("DELETE FROM dbo.TBItemTarefa WHERE TarefaId = @TarefaId;", new { TarefaId = idSelecionado }, transacao);
+        conexao.Execute(
+            "DELETE FROM dbo.TBItemTarefa WHERE TarefaId = @TarefaId;",
+            new { TarefaId = idSelecionado },
+            transacao
+        );
+
         InserirItens(conexao, transacao, idSelecionado, entidadeAtualizada.Itens);
 
         transacao.Commit();
@@ -65,13 +73,22 @@ public sealed class RepositorioTarefaEmSql(ISqlConnectionFactory connectionFacto
     public bool Excluir(Guid idSelecionado)
     {
         using SqlConnection conexao = connectionFactory.CreateConnection();
+
         conexao.Open();
 
         using SqlTransaction transacao = conexao.BeginTransaction();
 
-        conexao.Execute("DELETE FROM dbo.TBItemTarefa WHERE TarefaId = @TarefaId;", new { TarefaId = idSelecionado }, transacao);
+        conexao.Execute(
+            "DELETE FROM dbo.TBItemTarefa WHERE TarefaId = @TarefaId;",
+            new { TarefaId = idSelecionado },
+            transacao
+        );
 
-        bool conseguiuExcluir = conexao.Execute("DELETE FROM dbo.TBTarefa WHERE Id = @Id;", new { Id = idSelecionado }, transacao) == 1;
+        bool conseguiuExcluir = conexao.Execute(
+            "DELETE FROM dbo.TBTarefa WHERE Id = @Id;",
+            new { Id = idSelecionado },
+            transacao
+        ) == 1;
 
         transacao.Commit();
 
@@ -81,10 +98,18 @@ public sealed class RepositorioTarefaEmSql(ISqlConnectionFactory connectionFacto
     public Tarefa? SelecionarPorId(Guid idSelecionado)
     {
         using SqlConnection conexao = connectionFactory.CreateConnection();
+
         conexao.Open();
 
         const string sql = """
-            SELECT Id, Titulo, Prioridade, DataCriacao, DataConclusao, Concluida, PercentualConcluido
+            SELECT
+                Id,
+                Titulo,
+                Prioridade,
+                DataCriacao,
+                DataConclusao,
+                Concluida,
+                PercentualConcluido
             FROM dbo.TBTarefa
             WHERE Id = @Id;
         """;
@@ -102,10 +127,18 @@ public sealed class RepositorioTarefaEmSql(ISqlConnectionFactory connectionFacto
     public List<Tarefa> SelecionarTodos()
     {
         using SqlConnection conexao = connectionFactory.CreateConnection();
+
         conexao.Open();
 
         const string sql = """
-            SELECT Id, Titulo, Prioridade, DataCriacao, DataConclusao, Concluida, PercentualConcluido
+            SELECT
+                Id,
+                Titulo,
+                Prioridade,
+                DataCriacao,
+                DataConclusao,
+                Concluida,
+                PercentualConcluido
             FROM dbo.TBTarefa
             ORDER BY Prioridade DESC, DataCriacao DESC;
         """;
@@ -138,7 +171,12 @@ public sealed class RepositorioTarefaEmSql(ISqlConnectionFactory connectionFacto
         return Filtrar(t => t.Prioridade == prioridade);
     }
 
-    private static void InserirItens(SqlConnection conexao, SqlTransaction transacao, Guid tarefaId, List<ItemTarefa> itens)
+    private static void InserirItens(
+        SqlConnection conexao,
+        SqlTransaction transacao,
+        Guid tarefaId,
+        List<ItemTarefa> itens
+    )
     {
         const string sql = """
             INSERT INTO dbo.TBItemTarefa (Id, Titulo, Concluido, TarefaId)
@@ -146,7 +184,15 @@ public sealed class RepositorioTarefaEmSql(ISqlConnectionFactory connectionFacto
         """;
 
         foreach (ItemTarefa item in itens)
-            conexao.Execute(sql, new { item.Id, item.Titulo, item.Concluido, TarefaId = tarefaId }, transacao);
+        {
+            conexao.Execute(sql, new
+            {
+                item.Id,
+                item.Titulo,
+                item.Concluido,
+                TarefaId = tarefaId
+            }, transacao);
+        }
     }
 
     private static List<ItemTarefa> SelecionarItens(SqlConnection conexao, Guid tarefaId)
@@ -154,7 +200,8 @@ public sealed class RepositorioTarefaEmSql(ISqlConnectionFactory connectionFacto
         const string sql = """
             SELECT Id, Titulo, Concluido
             FROM dbo.TBItemTarefa
-            WHERE TarefaId = @TarefaId;
+            WHERE TarefaId = @TarefaId
+            ORDER BY Titulo;
         """;
 
         return conexao.Query<ItemTarefa>(sql, new { TarefaId = tarefaId }).ToList();

@@ -16,7 +16,10 @@ public class ServicoTarefa
     {
         Tarefa tarefa = new(dto.Titulo, dto.Prioridade)
         {
-            Itens = dto.Itens.Select(i => new ItemTarefa(i)).ToList()
+            Itens = dto.Itens
+                .Where(i => !string.IsNullOrWhiteSpace(i))
+                .Select(i => new ItemTarefa(i))
+                .ToList()
         };
 
         tarefa.AtualizarPercentual();
@@ -35,11 +38,14 @@ public class ServicoTarefa
     {
         Tarefa tarefa = new(dto.Titulo, dto.Prioridade)
         {
-            Itens = dto.Itens.Select(i => new ItemTarefa(i.Titulo)
-            {
-                Id = i.Id,
-                Concluido = i.Concluido
-            }).ToList()
+            Itens = dto.Itens
+                .Where(i => !string.IsNullOrWhiteSpace(i.Titulo))
+                .Select(i => new ItemTarefa(i.Titulo)
+                {
+                    Id = i.Id == Guid.Empty ? Guid.CreateVersion7() : i.Id,
+                    Concluido = i.Concluido
+                })
+                .ToList()
         };
 
         tarefa.AtualizarPercentual();
@@ -69,9 +75,22 @@ public class ServicoTarefa
 
     public List<ListarTarefasDto> SelecionarTodos()
     {
-        return repositorioTarefa.SelecionarTodos()
-            .Select(t => new ListarTarefasDto(t.Id, t.Titulo, t.Prioridade, t.Concluida, t.PercentualConcluido))
-            .ToList();
+        return MapearLista(repositorioTarefa.SelecionarTodos());
+    }
+
+    public List<ListarTarefasDto> SelecionarPendentes()
+    {
+        return MapearLista(repositorioTarefa.SelecionarPendentes());
+    }
+
+    public List<ListarTarefasDto> SelecionarConcluidas()
+    {
+        return MapearLista(repositorioTarefa.SelecionarConcluidas());
+    }
+
+    public List<ListarTarefasDto> SelecionarPorPrioridade(PrioridadeTarefa prioridade)
+    {
+        return MapearLista(repositorioTarefa.SelecionarPorPrioridade(prioridade));
     }
 
     public Result<DetalhesTarefaDto> SelecionarPorId(Guid id)
@@ -85,7 +104,27 @@ public class ServicoTarefa
             .Select(i => new ItemTarefaDto(i.Id, i.Titulo, i.Concluido))
             .ToList();
 
-        return Result.Ok(new DetalhesTarefaDto(tarefa.Id, tarefa.Titulo, tarefa.Prioridade, tarefa.Concluida, tarefa.PercentualConcluido, itens));
+        return Result.Ok(new DetalhesTarefaDto(
+            tarefa.Id,
+            tarefa.Titulo,
+            tarefa.Prioridade,
+            tarefa.Concluida,
+            tarefa.PercentualConcluido,
+            itens
+        ));
+    }
+
+    private static List<ListarTarefasDto> MapearLista(List<Tarefa> tarefas)
+    {
+        return tarefas
+            .Select(t => new ListarTarefasDto(
+                t.Id,
+                t.Titulo,
+                t.Prioridade,
+                t.Concluida,
+                t.PercentualConcluido
+            ))
+            .ToList();
     }
 
     private static Result ValidarEntidade(Tarefa tarefa)
