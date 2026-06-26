@@ -2,6 +2,7 @@ using eAgenda.WebApp.Compartilhado.Aplicacao;
 using eAgenda.WebApp.Compartilhado.Apresentacao;
 using eAgenda.WebApp.Compartilhado.Infra;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfraRepositories();

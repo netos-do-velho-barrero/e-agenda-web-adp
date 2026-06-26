@@ -1,16 +1,13 @@
 using AutoMapper;
 using eAgenda.WebApp.Modulos.ModuloContatos.Aplicacao;
-// using eAgenda.WebApp.Modulos.ModuloContatos.Apresentacao;
 using eAgenda.WebApp.Modulos.ModuloCompromissos.Aplicacao;
-//using eAgenda.WebApp.Modulos.ModuloCompromissos.Apresentacao;
-
 using eAgenda.WebApp.Modulos.ModuloDespesas.Aplicacao;
-//using eAgenda.WebApp.Modulos.ModuloDespesas.Apresentacao;
-using eAgenda.WebApp.Modulos.ModuloContatos.Aplicacao;
 using eAgenda.WebApp.Modulos.ModuloTarefas.Aplicacao;
 using eAgenda.WebApp.Modulos.ModuloCategoria.Aplicacao;
 using eAgenda.WebApp.Modulos.ModuloCategoria.Apresentacao;
-//using eAgenda.WebApp.Modulos.ModuloTarefas.Apresentacao;
+using eAgenda.WebApp.Modulos.ModuloCompromissos.Apresentacao;
+using eAgenda.WebApp.Modulos.ModuloContatos.Apresentacao;
+using eAgenda.WebApp.Modulos.ModuloTarefas.Apresentacao;
 
 namespace eAgenda.WebApp.Compartilhado.Aplicacao;
 
@@ -38,11 +35,11 @@ public static class InjecaoDependencia
     
         services.AddAutoMapper(config =>
         {
-           // config.AddProfile<ContatoProfile>();
-          //  config.AddProfile<CompromissoProfile>();
+           config.AddProfile<ContatoProfile>();
+            config.AddProfile<CompromissoProfile>();
             config.AddProfile<CategoriaProfile>();
-          //  config.AddProfile<DespesaProfile>();
-           // config.AddProfile<TarefaProfile>();
+          // config.AddProfile<DespesaProfile>();
+            config.AddProfile<TarefaProfile>();
         });
     }
 }
