@@ -16,10 +16,30 @@
     <Folder Include="Compartilhado\Infra\" />
     <Folder Include="Modulos\" />
     <Folder Include="Modulos\ModuloCategorias\" />
+    <Folder Include="Modulos\ModuloCategorias\Aplicacao\" />
+    <Folder Include="Modulos\ModuloCategorias\Apresentacao\" />
+    <Folder Include="Modulos\ModuloCategorias\Dominio\" />
+    <Folder Include="Modulos\ModuloCategorias\Infra\" />
     <Folder Include="Modulos\ModuloCompromissos\" />
+    <Folder Include="Modulos\ModuloCompromissos\Aplicacao\" />
+    <Folder Include="Modulos\ModuloCompromissos\Apresentacao\" />
+    <Folder Include="Modulos\ModuloCompromissos\Dominio\" />
+    <Folder Include="Modulos\ModuloCompromissos\Infra\" />
     <Folder Include="Modulos\ModuloContatos\" />
+    <Folder Include="Modulos\ModuloContatos\Aplicacao\" />
+    <Folder Include="Modulos\ModuloContatos\Apresentacao\" />
+    <Folder Include="Modulos\ModuloContatos\Dominio\" />
+    <Folder Include="Modulos\ModuloContatos\Infra\" />
     <Folder Include="Modulos\ModuloDespesas\" />
+    <Folder Include="Modulos\ModuloDespesas\Aplicacao\" />
+    <Folder Include="Modulos\ModuloDespesas\Apresentacao\" />
+    <Folder Include="Modulos\ModuloDespesas\Dominio\" />
+    <Folder Include="Modulos\ModuloDespesas\Infra\" />
     <Folder Include="Modulos\ModuloTarefas\" />
+    <Folder Include="Modulos\ModuloTarefas\Aplicacao\" />
+    <Folder Include="Modulos\ModuloTarefas\Apresentacao\" />
+    <Folder Include="Modulos\ModuloTarefas\Dominio\" />
+    <Folder Include="Modulos\ModuloTarefas\Infra\" />
   </ItemGroup>
 
 </Project>
