@@ -10,6 +10,7 @@ public sealed class RepositorioCompromissoEmSql(ISqlConnectionFactory connection
     public void Cadastrar(Compromisso entidade)
     {
         using SqlConnection conexao = connectionFactory.CreateConnection();
+
         conexao.Open();
 
         const string sql = """
@@ -19,7 +20,18 @@ public sealed class RepositorioCompromissoEmSql(ISqlConnectionFactory connection
             (@Id, @Assunto, @DataOcorrencia, @HoraInicio, @HoraTermino, @Tipo, @Local, @Link, @ContatoId);
         """;
 
-        conexao.Execute(sql, entidade);
+        conexao.Execute(sql, new
+        {
+            entidade.Id,
+            entidade.Assunto,
+            entidade.DataOcorrencia,
+            entidade.HoraInicio,
+            entidade.HoraTermino,
+            entidade.Tipo,
+            Local = entidade.Local ?? string.Empty,
+            Link = entidade.Link ?? string.Empty,
+            entidade.ContatoId
+        });
     }
 
     public bool Editar(Guid idSelecionado, Compromisso entidadeAtualizada)
@@ -27,6 +39,7 @@ public sealed class RepositorioCompromissoEmSql(ISqlConnectionFactory connection
         entidadeAtualizada.Id = idSelecionado;
 
         using SqlConnection conexao = connectionFactory.CreateConnection();
+
         conexao.Open();
 
         const string sql = """
@@ -42,25 +55,51 @@ public sealed class RepositorioCompromissoEmSql(ISqlConnectionFactory connection
             WHERE Id = @Id;
         """;
 
-        return conexao.Execute(sql, entidadeAtualizada) == 1;
+        return conexao.Execute(sql, new
+        {
+            entidadeAtualizada.Id,
+            entidadeAtualizada.Assunto,
+            entidadeAtualizada.DataOcorrencia,
+            entidadeAtualizada.HoraInicio,
+            entidadeAtualizada.HoraTermino,
+            entidadeAtualizada.Tipo,
+            Local = entidadeAtualizada.Local ?? string.Empty,
+            Link = entidadeAtualizada.Link ?? string.Empty,
+            entidadeAtualizada.ContatoId
+        }) == 1;
     }
 
     public bool Excluir(Guid idSelecionado)
     {
         using SqlConnection conexao = connectionFactory.CreateConnection();
+
         conexao.Open();
 
-        return conexao.Execute("DELETE FROM dbo.TBCompromisso WHERE Id = @Id;", new { Id = idSelecionado }) == 1;
+        const string sql = """
+            DELETE FROM dbo.TBCompromisso
+            WHERE Id = @Id;
+        """;
+
+        return conexao.Execute(sql, new { Id = idSelecionado }) == 1;
     }
 
     public Compromisso? SelecionarPorId(Guid idSelecionado)
     {
         using SqlConnection conexao = connectionFactory.CreateConnection();
+
         conexao.Open();
 
         const string sql = """
-            SELECT Id, Assunto, DataOcorrencia, HoraInicio, HoraTermino,
-                   TipoCompromisso AS Tipo, Local, Link, ContatoId
+            SELECT
+                Id,
+                Assunto,
+                DataOcorrencia,
+                HoraInicio,
+                HoraTermino,
+                TipoCompromisso AS Tipo,
+                Local,
+                Link,
+                ContatoId
             FROM dbo.TBCompromisso
             WHERE Id = @Id;
         """;
@@ -71,11 +110,20 @@ public sealed class RepositorioCompromissoEmSql(ISqlConnectionFactory connection
     public List<Compromisso> SelecionarTodos()
     {
         using SqlConnection conexao = connectionFactory.CreateConnection();
+
         conexao.Open();
 
         const string sql = """
-            SELECT Id, Assunto, DataOcorrencia, HoraInicio, HoraTermino,
-                   TipoCompromisso AS Tipo, Local, Link, ContatoId
+            SELECT
+                Id,
+                Assunto,
+                DataOcorrencia,
+                HoraInicio,
+                HoraTermino,
+                TipoCompromisso AS Tipo,
+                Local,
+                Link,
+                ContatoId
             FROM dbo.TBCompromisso
             ORDER BY DataOcorrencia, HoraInicio;
         """;
@@ -91,6 +139,7 @@ public sealed class RepositorioCompromissoEmSql(ISqlConnectionFactory connection
     public bool ExisteConflitoDeHorario(DateOnly data, TimeOnly horaInicio, TimeOnly horaTermino, Guid? idIgnorado = null)
     {
         using SqlConnection conexao = connectionFactory.CreateConnection();
+
         conexao.Open();
 
         const string sql = """
@@ -102,7 +151,13 @@ public sealed class RepositorioCompromissoEmSql(ISqlConnectionFactory connection
               AND (@IdIgnorado IS NULL OR Id <> @IdIgnorado);
         """;
 
-        return conexao.ExecuteScalar<int>(sql, new { Data = data, HoraInicio = horaInicio, HoraTermino = horaTermino, IdIgnorado = idIgnorado }) > 0;
+        return conexao.ExecuteScalar<int>(sql, new
+        {
+            Data = data,
+            HoraInicio = horaInicio,
+            HoraTermino = horaTermino,
+            IdIgnorado = idIgnorado
+        }) > 0;
     }
 
     public List<Compromisso> SelecionarCompromissosFuturos()

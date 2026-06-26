@@ -43,6 +43,15 @@ public class Compromisso : EntidadeBase<Compromisso>
         if (string.IsNullOrWhiteSpace(Assunto) || Assunto.Length < 2 || Assunto.Length > 100)
             erros.Add("O campo \"Assunto\" deve conter entre 2 e 100 caracteres.");
 
+        if (DataOcorrencia == default)
+            erros.Add("O campo \"Data de Ocorrencia\" deve ser preenchido.");
+
+        if (HoraInicio == default)
+            erros.Add("O campo \"Hora de Inicio\" deve ser preenchido.");
+
+        if (HoraTermino == default)
+            erros.Add("O campo \"Hora de Termino\" deve ser preenchido.");
+
         if (HoraTermino <= HoraInicio)
             erros.Add("A hora de termino deve ser maior que a hora de inicio.");
 

@@ -17,7 +17,16 @@ public class ServicoCompromisso
         if (repositorioCompromisso.ExisteConflitoDeHorario(dto.DataOcorrencia, dto.HoraInicio, dto.HoraTermino))
             return Result.Fail("Ja existe um compromisso neste periodo.");
 
-        Compromisso compromisso = new(dto.Assunto, dto.DataOcorrencia, dto.HoraInicio, dto.HoraTermino, dto.Tipo, dto.Local, dto.Link, dto.ContatoId);
+        Compromisso compromisso = new(
+            dto.Assunto,
+            dto.DataOcorrencia,
+            dto.HoraInicio,
+            dto.HoraTermino,
+            dto.Tipo,
+            dto.Local,
+            dto.Link,
+            dto.ContatoId
+        );
 
         Result resultadoValidacao = ValidarEntidade(compromisso);
 
@@ -34,7 +43,16 @@ public class ServicoCompromisso
         if (repositorioCompromisso.ExisteConflitoDeHorario(dto.DataOcorrencia, dto.HoraInicio, dto.HoraTermino, dto.Id))
             return Result.Fail("Ja existe um compromisso neste periodo.");
 
-        Compromisso compromisso = new(dto.Assunto, dto.DataOcorrencia, dto.HoraInicio, dto.HoraTermino, dto.Tipo, dto.Local, dto.Link, dto.ContatoId);
+        Compromisso compromisso = new(
+            dto.Assunto,
+            dto.DataOcorrencia,
+            dto.HoraInicio,
+            dto.HoraTermino,
+            dto.Tipo,
+            dto.Local,
+            dto.Link,
+            dto.ContatoId
+        );
 
         Result resultadoValidacao = ValidarEntidade(compromisso);
 
@@ -61,19 +79,37 @@ public class ServicoCompromisso
 
     public List<ListarCompromissosDto> SelecionarTodos()
     {
-        return repositorioCompromisso.SelecionarTodos()
-            .Select(c => new ListarCompromissosDto(c.Id, c.Assunto, c.DataOcorrencia, c.HoraInicio, c.HoraTermino, c.Tipo))
+        return repositorioCompromisso
+            .SelecionarTodos()
+            .Select(c => new ListarCompromissosDto(
+                c.Id,
+                c.Assunto,
+                c.DataOcorrencia,
+                c.HoraInicio,
+                c.HoraTermino,
+                c.Tipo
+            ))
             .ToList();
     }
 
     public Result<DetalhesCompromissoDto> SelecionarPorId(Guid id)
     {
-        Compromisso? c = repositorioCompromisso.SelecionarPorId(id);
+        Compromisso? compromisso = repositorioCompromisso.SelecionarPorId(id);
 
-        if (c == null)
+        if (compromisso == null)
             return Result.Fail("Compromisso nao encontrado.");
 
-        return Result.Ok(new DetalhesCompromissoDto(c.Id, c.Assunto, c.DataOcorrencia, c.HoraInicio, c.HoraTermino, c.Tipo, c.Local, c.Link, c.ContatoId));
+        return Result.Ok(new DetalhesCompromissoDto(
+            compromisso.Id,
+            compromisso.Assunto,
+            compromisso.DataOcorrencia,
+            compromisso.HoraInicio,
+            compromisso.HoraTermino,
+            compromisso.Tipo,
+            compromisso.Local,
+            compromisso.Link,
+            compromisso.ContatoId
+        ));
     }
 
     private static Result ValidarEntidade(Compromisso compromisso)
