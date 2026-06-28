@@ -1,14 +1,16 @@
+
+@model List<eAgenda.WebApp.Modulos.ModuloCompromissos.Apresentacao.ListarCompromissosViewModel>
+
 @{
     Layout = "_Layout";
     ViewBag.Titulo = "Listagem de Compromissos";
 }
 
-@model List<ListarCompromissosViewModel>
-
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="fs-3 text-primary fw-semibold">@ViewBag.Titulo</h1>
 
-    <a class="btn btn-primary rounded-pill px-4" asp-action="Cadastrar">
+  
+    <a class="btn btn-primary rounded-pill px-4" asp-controller="Compromisso" asp-action="Cadastrar">
         Cadastrar
     </a>
 </div>
@@ -42,12 +44,18 @@
                         <td>@compromisso.HoraTermino.ToString("HH\\:mm")</td>
                         <td>@compromisso.Tipo</td>
                         <td class="text-end">
-                            <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="Editar"
+                           
+                            <a class="btn btn-outline-primary btn-sm rounded-pill px-3" 
+                               asp-controller="Compromisso" 
+                               asp-action="Editar"
                                asp-route-id="@compromisso.Id">
                                 Editar
                             </a>
 
-                            <a class="btn btn-outline-danger btn-sm rounded-pill px-3" asp-action="Excluir"
+                            
+                            <a class="btn btn-outline-danger btn-sm rounded-pill px-3" 
+                               asp-controller="Compromisso" 
+                               asp-action="Excluir"
                                asp-route-id="@compromisso.Id">
                                 Excluir
                             </a>
