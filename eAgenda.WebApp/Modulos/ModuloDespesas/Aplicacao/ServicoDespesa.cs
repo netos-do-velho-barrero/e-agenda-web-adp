@@ -53,10 +53,10 @@ public class ServicoDespesa
         return Result.Ok();
     }
 
-    public List<ListarDespesasDto> SelecionarTodos()
+    public List<ListarDespesaDto> SelecionarTodos()
     {
         return repositorioDespesa.SelecionarTodos()
-            .Select(d => new ListarDespesasDto(d.Id, d.Descricao, d.DataOcorrencia, d.Valor, d.FormaPagamento))
+            .Select(d => new ListarDespesaDto(d.Id, d.Descricao, d.DataOcorrencia, d.Valor, d.FormaPagamento))
             .ToList();
     }
 

@@ -5,14 +5,14 @@ namespace eAgenda.WebApp.Modulos.ModuloDespesas.Dominio;
 public class Despesa : EntidadeBase<Despesa>
 {
     public string Descricao { get; set; } = string.Empty;
-    public DateOnly DataOcorrencia { get; set; } = DateOnly.FromDateTime(DateTime.Today);
+    public DateTime DataOcorrencia { get; set; } = DateTime.Today;
     public decimal Valor { get; set; }
     public FormaPagamento FormaPagamento { get; set; }
     public List<Guid> CategoriaIds { get; set; } = [];
 
     public Despesa() { }
 
-    public Despesa(string descricao, DateOnly dataOcorrencia, decimal valor, FormaPagamento formaPagamento, List<Guid> categoriaIds)
+    public Despesa(string descricao, DateTime dataOcorrencia, decimal valor, FormaPagamento formaPagamento, List<Guid> categoriaIds)
     {
         Descricao = descricao;
         DataOcorrencia = dataOcorrencia;

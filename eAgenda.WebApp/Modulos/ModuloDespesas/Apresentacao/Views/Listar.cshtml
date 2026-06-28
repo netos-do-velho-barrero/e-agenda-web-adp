@@ -1,0 +1,52 @@
+@model List<eAgenda.WebApp.Modulos.ModuloDespesas.Apresentacao.ListarDespesaViewModel>
+
+@{
+    ViewBag.Titulo = "Despesas";
+}
+
+<div class="d-flex justify-content-end mb-3">
+    <a class="btn btn-primary" asp-controller="Despesa" asp-action="Cadastrar">Cadastrar Despesa</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Nenhuma despesa cadastrada.
+    </div>
+}
+else
+{
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Data</th>
+                <th>Valor</th>
+                <th>Forma de Pagamento</th>
+                <th class="text-end">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var despesa in Model)
+            {
+                <tr>
+                    <td>@despesa.Descricao</td>
+                    <td>@despesa.DataOcorrencia.ToString("dd/MM/yyyy")</td>
+                    <td>@despesa.Valor.ToString("C")</td>
+                    <td>@despesa.FormaPagamento.ToString()</td>
+                    <td class="text-end">
+                        <a class="btn btn-outline-primary btn-sm" asp-controller="Despesa" asp-action="Editar"
+                           asp-route-id="@despesa.Id">
+                            Editar
+                        </a>
+
+                        <a class="btn btn-outline-danger btn-sm" asp-controller="Despesa" asp-action="Excluir"
+                           asp-route-id="@despesa.Id">
+                            Excluir
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

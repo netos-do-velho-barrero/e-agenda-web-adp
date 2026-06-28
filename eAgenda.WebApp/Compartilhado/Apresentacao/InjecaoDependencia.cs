@@ -7,11 +7,11 @@ public static class InjecaoDependencia
         services.AddControllersWithViews().AddRazorOptions(options =>
         {
             options.ViewLocationFormats.Clear();
-
-            options.ViewLocationFormats.Add("/Modulos/Modulo{1}/Apresentacao/Views/{0}.cshtml");
+           
+            options.ViewLocationFormats.Add("/Modulos/Modulo{1}s/Apresentacao/Views/{0}.cshtml");
             options.ViewLocationFormats.Add("/Compartilhado/Apresentacao/Views/{0}.cshtml");
         });
 
-   
+
     }
 }
