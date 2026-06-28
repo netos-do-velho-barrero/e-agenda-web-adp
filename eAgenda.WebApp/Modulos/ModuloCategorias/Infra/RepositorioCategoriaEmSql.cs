@@ -8,30 +8,30 @@ namespace eAgenda.WebApp.Modulos.ModuloCategoria.Infra;
 public sealed class RepositorioCategoriaEmSql(ISqlConnectionFactory connectionFactory) : IRepositorioCategoria
 {
     private const string InserirSql = """
-        INSERT INTO dbo.TBCategoria (Id, Titulo)
+        INSERT INTO dbo.TBCATEGORIA (Id, Titulo)
         VALUES (@Id, @Titulo);
     """;
 
     private const string AtualizarSql = """
-        UPDATE dbo.TBCategoria
+        UPDATE dbo.TBCATEGORIA
         SET Titulo = @Titulo
         WHERE Id = @Id;
     """;
 
     private const string ExcluirSql = """
-        DELETE FROM dbo.TBCategoria
+        DELETE FROM dbo.TBCATEGORIA
         WHERE Id = @Id;
     """;
 
     private const string SelecionarPorIdSql = """
         SELECT Id, Titulo
-        FROM dbo.TBCategoria
+        FROM dbo.TBCATEGORIA
         WHERE Id = @Id;
     """;
 
     private const string SelecionarTodosSql = """
         SELECT Id, Titulo
-        FROM dbo.TBCategoria
+        FROM dbo.TBCATEGORIA
         ORDER BY Titulo;
     """;
 
@@ -95,7 +95,7 @@ public sealed class RepositorioCategoriaEmSql(ISqlConnectionFactory connectionFa
 
         const string sql = """
             SELECT COUNT(1)
-            FROM dbo.TBCategoria
+            FROM dbo.TBCATEGORIA
             WHERE Titulo = @Titulo
               AND (@IdIgnorado IS NULL OR Id <> @IdIgnorado);
         """;
@@ -111,8 +111,8 @@ public sealed class RepositorioCategoriaEmSql(ISqlConnectionFactory connectionFa
 
         const string sql = """
             SELECT COUNT(1)
-            FROM dbo.TBDespesaCategoria
-            WHERE CategoriaId = @CategoriaId;
+            FROM dbo.TBDESPESA_TBCATEGORIA
+            WHERE Categoria_Id = @CategoriaId;
         """;
 
         return conexao.ExecuteScalar<int>(sql, new { CategoriaId = categoriaId }) > 0;
