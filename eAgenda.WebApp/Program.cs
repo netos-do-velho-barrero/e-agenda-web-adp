@@ -3,8 +3,12 @@ using eAgenda.WebApp.Compartilhado.Apresentacao;
 using eAgenda.WebApp.Compartilhado.Infra;
 using eAgenda.WebApp.Compartilhado.Infra.Sql;
 
-
 var builder = WebApplication.CreateBuilder(args);
+
+if (builder.Environment.IsProduction())
+{
+    builder.Configuration.AddUserSecrets<Program>();
+}
 
 DapperTypeHandlers.Registrar();
 
