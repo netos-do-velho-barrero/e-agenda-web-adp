@@ -1,19 +1,27 @@
 using AutoMapper;
 using eAgenda.WebApp.Modulos.ModuloCompromissos.Aplicacao;
 using eAgenda.WebApp.Modulos.ModuloCompromissos.Dominio;
+using eAgenda.WebApp.Modulos.ModuloContatos.Aplicacao;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace eAgenda.WebApp.Modulos.ModuloCompromissos.Apresentacao;
 
-public class CompromissosController : Controller
+public class CompromissoController : Controller
 {
     private readonly ServicoCompromisso servicoCompromisso;
+    private readonly ServicoContato servicoContato;
     private readonly IMapper mapeador;
 
-    public CompromissosController(ServicoCompromisso servicoCompromisso, IMapper mapeador)
+    public CompromissoController(
+        ServicoCompromisso servicoCompromisso,
+        ServicoContato servicoContato,
+        IMapper mapeador
+    )
     {
         this.servicoCompromisso = servicoCompromisso;
+        this.servicoContato = servicoContato;
         this.mapeador = mapeador;
     }
 
@@ -31,6 +39,8 @@ public class CompromissosController : Controller
     [HttpGet]
     public IActionResult Cadastrar()
     {
+        CarregarContatos();
+
         CadastrarCompromissoViewModel viewModel = new(
             string.Empty,
             DateOnly.FromDateTime(DateTime.Today),
@@ -49,7 +59,10 @@ public class CompromissosController : Controller
     public IActionResult Cadastrar(CadastrarCompromissoViewModel viewModel)
     {
         if (!ModelState.IsValid)
+        {
+            CarregarContatos();
             return View(viewModel);
+        }
 
         CadastrarCompromissoDto dto = mapeador.Map<CadastrarCompromissoDto>(viewModel);
 
@@ -58,7 +71,7 @@ public class CompromissosController : Controller
         if (resultado.IsFailed)
         {
             ModelState.AddModelError(string.Empty, resultado.Errors[0].Message);
-
+            CarregarContatos();
             return View(viewModel);
         }
 
@@ -73,9 +86,10 @@ public class CompromissosController : Controller
         if (resultado.IsFailed)
         {
             TempData["MensagemErro"] = resultado.Errors[0].Message;
-
             return RedirectToAction(nameof(Listar));
         }
+
+        CarregarContatos();
 
         EditarCompromissoViewModel viewModel =
             mapeador.Map<EditarCompromissoViewModel>(resultado.Value);
@@ -87,7 +101,10 @@ public class CompromissosController : Controller
     public IActionResult Editar(EditarCompromissoViewModel viewModel)
     {
         if (!ModelState.IsValid)
+        {
+            CarregarContatos();
             return View(viewModel);
+        }
 
         EditarCompromissoDto dto = mapeador.Map<EditarCompromissoDto>(viewModel);
 
@@ -96,7 +113,7 @@ public class CompromissosController : Controller
         if (resultado.IsFailed)
         {
             ModelState.AddModelError(string.Empty, resultado.Errors[0].Message);
-
+            CarregarContatos();
             return View(viewModel);
         }
 
@@ -111,7 +128,6 @@ public class CompromissosController : Controller
         if (resultado.IsFailed)
         {
             TempData["MensagemErro"] = resultado.Errors[0].Message;
-
             return RedirectToAction(nameof(Listar));
         }
 
@@ -130,5 +146,16 @@ public class CompromissosController : Controller
             TempData["MensagemErro"] = resultado.Errors[0].Message;
 
         return RedirectToAction(nameof(Listar));
+    }
+
+    private void CarregarContatos()
+    {
+        List<SelectListItem> contatos = servicoContato.SelecionarTodos()
+            .Select(c => new SelectListItem($"{c.Nome} - {c.Email}", c.Id.ToString()))
+            .ToList();
+
+        contatos.Insert(0, new SelectListItem("Nenhum contato", string.Empty));
+
+        ViewBag.Contatos = contatos;
     }
 }

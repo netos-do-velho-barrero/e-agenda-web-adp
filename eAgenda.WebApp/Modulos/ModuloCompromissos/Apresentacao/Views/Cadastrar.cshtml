@@ -56,8 +56,8 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="ContatoId" class="form-label fw-semibold text-primary text-uppercase small">Contato Id</label>
-        <input asp-for="ContatoId" type="text" class="form-control">
+        <label asp-for="ContatoId" class="form-label fw-semibold text-primary text-uppercase small">Contato</label>
+        <select asp-for="ContatoId" class="form-select" asp-items="ViewBag.Contatos"></select>
         <span asp-validation-for="ContatoId" class="text-danger small fw-semibold"></span>
     </div>
 

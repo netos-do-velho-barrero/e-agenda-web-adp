@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eAgenda.WebApp.Modulos.ModuloTarefas.Apresentacao;
 
-public class TarefasController : Controller
+public class TarefaController : Controller
 {
     private readonly ServicoTarefa servicoTarefa;
     private readonly IMapper mapeador;
 
-    public TarefasController(ServicoTarefa servicoTarefa, IMapper mapeador)
+    public TarefaController(ServicoTarefa servicoTarefa, IMapper mapeador)
     {
         this.servicoTarefa = servicoTarefa;
         this.mapeador = mapeador;
@@ -40,21 +40,13 @@ public class TarefasController : Controller
     [HttpGet]
     public IActionResult Cadastrar()
     {
-        CadastrarTarefaViewModel viewModel = new(
-            string.Empty,
-            PrioridadeTarefa.Normal,
-            []
-        );
-
-        return View(viewModel);
+        return View(new CadastrarTarefaViewModel(string.Empty, PrioridadeTarefa.Normal, []));
     }
 
     [HttpPost]
     public IActionResult Cadastrar(CadastrarTarefaViewModel viewModel)
     {
-        List<string> itens = viewModel.Itens
-            .Where(i => !string.IsNullOrWhiteSpace(i))
-            .ToList();
+        List<string> itens = viewModel.Itens.Where(i => !string.IsNullOrWhiteSpace(i)).ToList();
 
         CadastrarTarefaViewModel viewModelTratado = viewModel with { Itens = itens };
 
@@ -68,7 +60,6 @@ public class TarefasController : Controller
         if (resultado.IsFailed)
         {
             ModelState.AddModelError(string.Empty, resultado.Errors[0].Message);
-
             return View(viewModelTratado);
         }
 
@@ -83,12 +74,10 @@ public class TarefasController : Controller
         if (resultado.IsFailed)
         {
             TempData["MensagemErro"] = resultado.Errors[0].Message;
-
             return RedirectToAction(nameof(Listar));
         }
 
-        EditarTarefaViewModel viewModel =
-            mapeador.Map<EditarTarefaViewModel>(resultado.Value);
+        EditarTarefaViewModel viewModel = mapeador.Map<EditarTarefaViewModel>(resultado.Value);
 
         return View(viewModel);
     }
@@ -96,24 +85,21 @@ public class TarefasController : Controller
     [HttpPost]
     public IActionResult Editar(EditarTarefaViewModel viewModel)
     {
-        List<ItemTarefaViewModel> itens = viewModel.Itens
+        if (!ModelState.IsValid)
+            return View(viewModel);
+
+        viewModel.Itens = viewModel.Itens
             .Where(i => !string.IsNullOrWhiteSpace(i.Titulo))
             .ToList();
 
-        EditarTarefaViewModel viewModelTratado = viewModel with { Itens = itens };
-
-        if (!ModelState.IsValid)
-            return View(viewModelTratado);
-
-        EditarTarefaDto dto = mapeador.Map<EditarTarefaDto>(viewModelTratado);
+        EditarTarefaDto dto = mapeador.Map<EditarTarefaDto>(viewModel);
 
         Result resultado = servicoTarefa.Editar(dto);
 
         if (resultado.IsFailed)
         {
             ModelState.AddModelError(string.Empty, resultado.Errors[0].Message);
-
-            return View(viewModelTratado);
+            return View(viewModel);
         }
 
         return RedirectToAction(nameof(Listar));
@@ -127,12 +113,10 @@ public class TarefasController : Controller
         if (resultado.IsFailed)
         {
             TempData["MensagemErro"] = resultado.Errors[0].Message;
-
             return RedirectToAction(nameof(Listar));
         }
 
-        ExcluirTarefaViewModel viewModel =
-            mapeador.Map<ExcluirTarefaViewModel>(resultado.Value);
+        ExcluirTarefaViewModel viewModel = mapeador.Map<ExcluirTarefaViewModel>(resultado.Value);
 
         return View(viewModel);
     }

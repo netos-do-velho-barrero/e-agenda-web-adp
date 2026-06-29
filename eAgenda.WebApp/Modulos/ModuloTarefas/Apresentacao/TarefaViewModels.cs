@@ -3,11 +3,14 @@ using eAgenda.WebApp.Modulos.ModuloTarefas.Dominio;
 
 namespace eAgenda.WebApp.Modulos.ModuloTarefas.Apresentacao;
 
-public record ItemTarefaViewModel(
-    Guid Id,
-    string Titulo,
-    bool Concluido
-);
+public class ItemTarefaViewModel
+{
+    public Guid Id { get; set; }
+
+    public string Titulo { get; set; } = string.Empty;
+
+    public bool Concluido { get; set; }
+}
 
 public record ListarTarefasViewModel(
     Guid Id,
@@ -28,18 +31,18 @@ public record CadastrarTarefaViewModel(
     List<string> Itens
 );
 
-public record EditarTarefaViewModel(
-    Guid Id,
+public class EditarTarefaViewModel
+{
+    public Guid Id { get; set; }
 
-    [Required(ErrorMessage = "O campo \"Titulo\" deve ser preenchido.")]
-    [StringLength(100, MinimumLength = 2, ErrorMessage = "O campo \"Titulo\" deve conter entre 2 e 100 caracteres.")]
-    string Titulo,
+    [Required]
+    [StringLength(100, MinimumLength = 2)]
+    public string Titulo { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "O campo \"Prioridade\" deve ser preenchido.")]
-    PrioridadeTarefa Prioridade,
+    public PrioridadeTarefa Prioridade { get; set; }
 
-    List<ItemTarefaViewModel> Itens
-);
+    public List<ItemTarefaViewModel> Itens { get; set; } = [];
+}
 
 public record ExcluirTarefaViewModel(
     Guid Id,

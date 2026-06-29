@@ -1,0 +1,47 @@
+@model List<eAgenda.WebApp.Modulos.ModuloDespesas.Apresentacao.ListarDespesaViewModel>
+
+@{
+    ViewBag.Titulo = $"Despesas da categoria {ViewBag.CategoriaTitulo}";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a class="btn btn-outline-primary" asp-controller="Categoria" asp-action="Listar">Voltar</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Nenhuma despesa cadastrada para esta categoria.
+    </div>
+}
+else
+{
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Descricao</th>
+                <th>Data</th>
+                <th>Valor</th>
+                <th>Forma de Pagamento</th>
+                <th class="text-end">Acoes</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var despesa in Model)
+            {
+                <tr>
+                    <td>@despesa.Descricao</td>
+                    <td>@despesa.DataOcorrencia.ToString("dd/MM/yyyy")</td>
+                    <td>@despesa.Valor.ToString("C")</td>
+                    <td>@despesa.FormaPagamento</td>
+                    <td class="text-end">
+                        <a class="btn btn-outline-primary btn-sm" asp-controller="Despesa" asp-action="Editar"
+                           asp-route-id="@despesa.Id">
+                            Editar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,11 +1,18 @@
-using Microsoft.AspNetCore.Mvc;
-using FluentResults;
 using AutoMapper;
+using FluentResults;
+using Microsoft.AspNetCore.Mvc;
 using eAgenda.WebApp.Compartilhado.Apresentacao.Extensions;
 using eAgenda.WebApp.Modulos.ModuloCategoria.Aplicacao;
+using eAgenda.WebApp.Modulos.ModuloDespesas.Aplicacao;
+using eAgenda.WebApp.Modulos.ModuloDespesas.Apresentacao;
+
 namespace eAgenda.WebApp.Modulos.ModuloCategoria.Apresentacao;
 
-public class CategoriaController(ServicoCategoria servicoCategoria, IMapper mapeador) : Controller
+public class CategoriaController(
+    ServicoCategoria servicoCategoria,
+    ServicoDespesa servicoDespesa,
+    IMapper mapeador
+) : Controller
 {
     [HttpGet]
     public ActionResult Listar()
@@ -15,6 +22,25 @@ public class CategoriaController(ServicoCategoria servicoCategoria, IMapper mape
         List<ListarCategoriaViewModel> listarVms = mapeador.Map<List<ListarCategoriaViewModel>>(dtos);
 
         return View(listarVms);
+    }
+
+    [HttpGet]
+    public ActionResult Despesas(Guid id)
+    {
+        Result<DetalhesCategoriaDto> resultadoCategoria = servicoCategoria.SelecionarPorId(id);
+
+        if (resultadoCategoria.IsFailed)
+        {
+            TempData.AddErrorMessage(resultadoCategoria);
+            return RedirectToAction(nameof(Listar));
+        }
+
+        List<ListarDespesaDto> despesasDto = servicoDespesa.SelecionarPorCategoria(id);
+        List<ListarDespesaViewModel> despesasVm = mapeador.Map<List<ListarDespesaViewModel>>(despesasDto);
+
+        ViewBag.CategoriaTitulo = resultadoCategoria.Value.Titulo;
+
+        return View(despesasVm);
     }
 
     [HttpGet]
@@ -53,8 +79,7 @@ public class CategoriaController(ServicoCategoria servicoCategoria, IMapper mape
             return RedirectToAction(nameof(Listar));
         }
 
-        DetalhesCategoriaDto dto = resultado.Value;
-        EditarCategoriaViewModel editarVm = mapeador.Map<EditarCategoriaViewModel>(dto);
+        EditarCategoriaViewModel editarVm = mapeador.Map<EditarCategoriaViewModel>(resultado.Value);
 
         return View(editarVm);
     }
@@ -88,8 +113,7 @@ public class CategoriaController(ServicoCategoria servicoCategoria, IMapper mape
             return RedirectToAction(nameof(Listar));
         }
 
-        DetalhesCategoriaDto dto = resultado.Value;
-        ExcluirCategoriaViewModel excluirVm = mapeador.Map<ExcluirCategoriaViewModel>(dto);
+        ExcluirCategoriaViewModel excluirVm = mapeador.Map<ExcluirCategoriaViewModel>(resultado.Value);
 
         return View(excluirVm);
     }

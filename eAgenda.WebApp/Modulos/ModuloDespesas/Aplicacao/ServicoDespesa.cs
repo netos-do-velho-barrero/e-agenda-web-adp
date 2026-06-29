@@ -60,6 +60,13 @@ public class ServicoDespesa
             .ToList();
     }
 
+    public List<ListarDespesaDto> SelecionarPorCategoria(Guid categoriaId)
+    {
+        return repositorioDespesa.SelecionarPorCategoria(categoriaId)
+            .Select(d => new ListarDespesaDto(d.Id, d.Descricao, d.DataOcorrencia, d.Valor, d.FormaPagamento))
+            .ToList();
+    }
+
     public Result<DetalhesDespesaDto> SelecionarPorId(Guid id)
     {
         Despesa? despesa = repositorioDespesa.SelecionarPorId(id);
@@ -67,7 +74,14 @@ public class ServicoDespesa
         if (despesa == null)
             return Result.Fail("Despesa nao encontrada.");
 
-        return Result.Ok(new DetalhesDespesaDto(despesa.Id, despesa.Descricao, despesa.DataOcorrencia, despesa.Valor, despesa.FormaPagamento, despesa.CategoriaIds));
+        return Result.Ok(new DetalhesDespesaDto(
+            despesa.Id,
+            despesa.Descricao,
+            despesa.DataOcorrencia,
+            despesa.Valor,
+            despesa.FormaPagamento,
+            despesa.CategoriaIds
+        ));
     }
 
     private static Result ValidarEntidade(Despesa despesa)

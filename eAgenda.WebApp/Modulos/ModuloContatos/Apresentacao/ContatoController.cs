@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eAgenda.WebApp.Modulos.ModuloContatos.Apresentacao;
 
-public class ContatosController : Controller
+public class ContatoController : Controller
 {
     private readonly ServicoContato servicoContato;
     private readonly IMapper mapeador;
 
-    public ContatosController(ServicoContato servicoContato, IMapper mapeador)
+    public ContatoController(ServicoContato servicoContato, IMapper mapeador)
     {
         this.servicoContato = servicoContato;
         this.mapeador = mapeador;
@@ -30,13 +30,7 @@ public class ContatosController : Controller
     [HttpGet]
     public IActionResult Cadastrar()
     {
-        CadastrarContatoViewModel viewModel = new(
-            string.Empty,
-            string.Empty,
-            string.Empty,
-            null,
-            null
-        );
+        CadastrarContatoViewModel viewModel = new(string.Empty, string.Empty, string.Empty, null, null);
 
         return View(viewModel);
     }
@@ -54,7 +48,6 @@ public class ContatosController : Controller
         if (resultado.IsFailed)
         {
             ModelState.AddModelError(string.Empty, resultado.Errors[0].Message);
-
             return View(viewModel);
         }
 
@@ -69,12 +62,10 @@ public class ContatosController : Controller
         if (resultado.IsFailed)
         {
             TempData["MensagemErro"] = resultado.Errors[0].Message;
-
             return RedirectToAction(nameof(Listar));
         }
 
-        EditarContatoViewModel viewModel =
-            mapeador.Map<EditarContatoViewModel>(resultado.Value);
+        EditarContatoViewModel viewModel = mapeador.Map<EditarContatoViewModel>(resultado.Value);
 
         return View(viewModel);
     }
@@ -92,7 +83,6 @@ public class ContatosController : Controller
         if (resultado.IsFailed)
         {
             ModelState.AddModelError(string.Empty, resultado.Errors[0].Message);
-
             return View(viewModel);
         }
 
@@ -107,12 +97,10 @@ public class ContatosController : Controller
         if (resultado.IsFailed)
         {
             TempData["MensagemErro"] = resultado.Errors[0].Message;
-
             return RedirectToAction(nameof(Listar));
         }
 
-        ExcluirContatoViewModel viewModel =
-            mapeador.Map<ExcluirContatoViewModel>(resultado.Value);
+        ExcluirContatoViewModel viewModel = mapeador.Map<ExcluirContatoViewModel>(resultado.Value);
 
         return View(viewModel);
     }

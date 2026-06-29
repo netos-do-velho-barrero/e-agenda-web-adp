@@ -8,30 +8,30 @@ namespace eAgenda.WebApp.Modulos.ModuloCategoria.Infra;
 public sealed class RepositorioCategoriaEmSql(ISqlConnectionFactory connectionFactory) : IRepositorioCategoria
 {
     private const string InserirSql = """
-        INSERT INTO dbo.TBCATEGORIA (Id, Titulo)
+        INSERT INTO dbo.TBCategoria (Id, Titulo)
         VALUES (@Id, @Titulo);
     """;
 
     private const string AtualizarSql = """
-        UPDATE dbo.TBCATEGORIA
+        UPDATE dbo.TBCategoria
         SET Titulo = @Titulo
         WHERE Id = @Id;
     """;
 
     private const string ExcluirSql = """
-        DELETE FROM dbo.TBCATEGORIA
+        DELETE FROM dbo.TBCategoria
         WHERE Id = @Id;
     """;
 
     private const string SelecionarPorIdSql = """
         SELECT Id, Titulo
-        FROM dbo.TBCATEGORIA
+        FROM dbo.TBCategoria
         WHERE Id = @Id;
     """;
 
     private const string SelecionarTodosSql = """
         SELECT Id, Titulo
-        FROM dbo.TBCATEGORIA
+        FROM dbo.TBCategoria
         ORDER BY Titulo;
     """;
 
@@ -95,12 +95,16 @@ public sealed class RepositorioCategoriaEmSql(ISqlConnectionFactory connectionFa
 
         const string sql = """
             SELECT COUNT(1)
-            FROM dbo.TBCATEGORIA
+            FROM dbo.TBCategoria
             WHERE Titulo = @Titulo
               AND (@IdIgnorado IS NULL OR Id <> @IdIgnorado);
         """;
 
-        return conexao.ExecuteScalar<int>(sql, new { Titulo = titulo, IdIgnorado = idIgnorado }) > 0;
+        return conexao.ExecuteScalar<int>(sql, new
+        {
+            Titulo = titulo,
+            IdIgnorado = idIgnorado
+        }) > 0;
     }
 
     public bool PossuiDespesasVinculadas(Guid categoriaId)
@@ -111,10 +115,13 @@ public sealed class RepositorioCategoriaEmSql(ISqlConnectionFactory connectionFa
 
         const string sql = """
             SELECT COUNT(1)
-            FROM dbo.TBDESPESA_TBCATEGORIA
-            WHERE Categoria_Id = @CategoriaId;
+            FROM dbo.TBDespesaCategoria
+            WHERE CategoriaId = @CategoriaId;
         """;
 
-        return conexao.ExecuteScalar<int>(sql, new { CategoriaId = categoriaId }) > 0;
+        return conexao.ExecuteScalar<int>(sql, new
+        {
+            CategoriaId = categoriaId
+        }) > 0;
     }
 }
