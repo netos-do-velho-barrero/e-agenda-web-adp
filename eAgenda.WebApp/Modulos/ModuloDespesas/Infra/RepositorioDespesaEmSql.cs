@@ -52,11 +52,7 @@ public sealed class RepositorioDespesaEmSql(ISqlConnectionFactory connectionFact
             return false;
         }
 
-        conexao.Execute("""
-            DELETE FROM dbo.TBDespesaCategoria
-            WHERE DespesaId = @DespesaId;
-        """, new { DespesaId = idSelecionado }, transacao);
-
+        conexao.Execute("DELETE FROM dbo.TBDespesaCategoria WHERE DespesaId = @DespesaId;", new { DespesaId = idSelecionado }, transacao);
         InserirCategorias(conexao, transacao, idSelecionado, entidadeAtualizada.CategoriaIds);
 
         transacao.Commit();
@@ -71,10 +67,7 @@ public sealed class RepositorioDespesaEmSql(ISqlConnectionFactory connectionFact
 
         using SqlTransaction transacao = conexao.BeginTransaction();
 
-        conexao.Execute("""
-            DELETE FROM dbo.TBDespesaCategoria
-            WHERE DespesaId = @DespesaId;
-        """, new { DespesaId = idSelecionado }, transacao);
+        conexao.Execute("DELETE FROM dbo.TBDespesaCategoria WHERE DespesaId = @DespesaId;", new { DespesaId = idSelecionado }, transacao);
 
         bool conseguiuExcluir = conexao.Execute("""
             DELETE FROM dbo.TBDespesa
@@ -144,13 +137,7 @@ public sealed class RepositorioDespesaEmSql(ISqlConnectionFactory connectionFact
         """;
 
         foreach (Guid categoriaId in categoriaIds)
-        {
-            conexao.Execute(sql, new
-            {
-                DespesaId = despesaId,
-                CategoriaId = categoriaId
-            }, transacao);
-        }
+            conexao.Execute(sql, new { DespesaId = despesaId, CategoriaId = categoriaId }, transacao);
     }
 
     private static List<Guid> SelecionarCategoriaIds(SqlConnection conexao, Guid despesaId)
@@ -161,9 +148,6 @@ public sealed class RepositorioDespesaEmSql(ISqlConnectionFactory connectionFact
             WHERE DespesaId = @DespesaId;
         """;
 
-        return conexao.Query<Guid>(sql, new
-        {
-            DespesaId = despesaId
-        }).ToList();
+        return conexao.Query<Guid>(sql, new { DespesaId = despesaId }).ToList();
     }
 }
