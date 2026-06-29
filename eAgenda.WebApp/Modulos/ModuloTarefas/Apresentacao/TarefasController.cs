@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eAgenda.WebApp.Modulos.ModuloTarefas.Apresentacao;
 
-public class TarefasController : Controller
+public class TarefaController : Controller
 {
     private readonly ServicoTarefa servicoTarefa;
     private readonly IMapper mapeador;
 
-    public TarefasController(ServicoTarefa servicoTarefa, IMapper mapeador)
+    public TarefaController(ServicoTarefa servicoTarefa, IMapper mapeador)
     {
         this.servicoTarefa = servicoTarefa;
         this.mapeador = mapeador;

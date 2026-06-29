@@ -111,8 +111,8 @@ public sealed class RepositorioCategoriaEmSql(ISqlConnectionFactory connectionFa
 
         const string sql = """
             SELECT COUNT(1)
-            FROM dbo.TBDESPESA_TBCATEGORIA
-            WHERE Categoria_Id = @CategoriaId;
+            FROM dbo.TBDespesaCategoria
+            WHERE CategoriaId = @CategoriaId;
         """;
 
         return conexao.ExecuteScalar<int>(sql, new { CategoriaId = categoriaId }) > 0;

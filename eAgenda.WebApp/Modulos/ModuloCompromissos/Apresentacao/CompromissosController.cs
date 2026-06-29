@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eAgenda.WebApp.Modulos.ModuloCompromissos.Apresentacao;
 
-public class CompromissosController : Controller
+public class CompromissoController : Controller
 {
     private readonly ServicoCompromisso servicoCompromisso;
     private readonly IMapper mapeador;
 
-    public CompromissosController(ServicoCompromisso servicoCompromisso, IMapper mapeador)
+    public CompromissoController(ServicoCompromisso servicoCompromisso, IMapper mapeador)
     {
         this.servicoCompromisso = servicoCompromisso;
         this.mapeador = mapeador;

@@ -51,8 +51,7 @@ public sealed class RepositorioDespesaEmSql(ISqlConnectionFactory connectionFact
             return false;
         }
 
-        
-        conexao.Execute("DELETE FROM TBDESPESA_TBCATEGORIA WHERE Despesa_Id = @Despesa_Id;", new { Despesa_Id = idSelecionado }, transacao);
+        conexao.Execute("DELETE FROM dbo.TBDespesaCategoria WHERE DespesaId = @DespesaId;", new { DespesaId = idSelecionado }, transacao);
         InserirCategorias(conexao, transacao, idSelecionado, entidadeAtualizada.CategoriaIds);
 
         transacao.Commit();
@@ -67,8 +66,7 @@ public sealed class RepositorioDespesaEmSql(ISqlConnectionFactory connectionFact
 
         using SqlTransaction transacao = conexao.BeginTransaction();
 
-        // Corrigido para a tabela e colunas corretas
-        conexao.Execute("DELETE FROM TBDESPESA_TBCATEGORIA WHERE Despesa_Id = @Despesa_Id;", new { Despesa_Id = idSelecionado }, transacao);
+        conexao.Execute("DELETE FROM dbo.TBDespesaCategoria WHERE DespesaId = @DespesaId;", new { DespesaId = idSelecionado }, transacao);
 
         bool conseguiuExcluir = conexao.Execute("DELETE FROM dbo.TBDespesa WHERE Id = @Id;", new { Id = idSelecionado }, transacao) == 1;
 
@@ -129,25 +127,23 @@ public sealed class RepositorioDespesaEmSql(ISqlConnectionFactory connectionFact
 
     private static void InserirCategorias(SqlConnection conexao, SqlTransaction transacao, Guid despesaId, List<Guid> categoriaIds)
     {
-      
         const string sql = """
-            INSERT INTO TBDESPESA_TBCATEGORIA (Despesa_Id, Categoria_Id)
-            VALUES (@Despesa_Id, @Categoria_Id);
+            INSERT INTO dbo.TBDespesaCategoria (DespesaId, CategoriaId)
+            VALUES (@DespesaId, @CategoriaId);
         """;
 
         foreach (Guid categoriaId in categoriaIds)
-            conexao.Execute(sql, new { Despesa_Id = despesaId, Categoria_Id = categoriaId }, transacao);
+            conexao.Execute(sql, new { DespesaId = despesaId, CategoriaId = categoriaId }, transacao);
     }
 
     private static List<Guid> SelecionarCategoriaIds(SqlConnection conexao, Guid despesaId)
     {
-      
         const string sql = """
-            SELECT Categoria_Id
-            FROM TBDESPESA_TBCATEGORIA
-            WHERE Despesa_Id = @Despesa_Id;
+            SELECT CategoriaId
+            FROM dbo.TBDespesaCategoria
+            WHERE DespesaId = @DespesaId;
         """;
 
-        return conexao.Query<Guid>(sql, new { Despesa_Id = despesaId }).ToList();
+        return conexao.Query<Guid>(sql, new { DespesaId = despesaId }).ToList();
     }
 }
