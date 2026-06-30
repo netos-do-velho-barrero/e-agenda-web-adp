@@ -1,8 +1,10 @@
+using ControleDeMedicamentosWeb.WebApp.Compartilhado.Apresentacao.Mapping;
+
 namespace eAgenda.WebApp.Compartilhado.Apresentacao;
 
 public static class InjecaoDependencia
 {
-    public static void AddPresentationConfig(this IServiceCollection services)
+    public static void AddPresentationConfig(this IServiceCollection services, IConfiguration configuration )
     {
         services.AddControllersWithViews().AddRazorOptions(options =>
         {
@@ -11,6 +13,20 @@ public static class InjecaoDependencia
             options.ViewLocationFormats.Add("/Modulos/Modulo{1}/Apresentacao/Views/{0}.cshtml");
             options.ViewLocationFormats.Add("/Modulos/Modulo{1}s/Apresentacao/Views/{0}.cshtml");
             options.ViewLocationFormats.Add("/Compartilhado/Apresentacao/Views/{0}.cshtml");
+        });
+
+          services.AddAutoMapper(mapperConfig =>
+        {
+            AutoMapperOptions autoMapperOptions = configuration
+                .GetSection(AutoMapperOptions.SectionName)
+                .Get<AutoMapperOptions>() ?? new AutoMapperOptions();
+
+            string? licenseKey = autoMapperOptions.LicenseKey;
+
+            if (!string.IsNullOrWhiteSpace(licenseKey))
+                mapperConfig.LicenseKey = licenseKey;
+
+            mapperConfig.AddMaps(typeof(Program));
         });
     }
 }

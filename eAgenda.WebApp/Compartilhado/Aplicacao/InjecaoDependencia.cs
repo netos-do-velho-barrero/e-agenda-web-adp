@@ -9,14 +9,21 @@ using eAgenda.WebApp.Modulos.ModuloCompromissos.Apresentacao;
 using eAgenda.WebApp.Modulos.ModuloContatos.Apresentacao;
 using eAgenda.WebApp.Modulos.ModuloTarefas.Apresentacao;
 using eAgenda.WebApp.Modulos.ModuloDespesas.Apresentacao;
+using eAgenda.WebApp.Compartilhado.Aplicacao.Logging;
+
 
 namespace eAgenda.WebApp.Compartilhado.Aplicacao;
 
 public static class InjecaoDependencia
 {
-    public static void AddApplicationServices(this IServiceCollection services)
+
+
+    public static void AddApplicationServices(this IServiceCollection services, 
+    IConfiguration configuration,
+        ILoggingBuilder logging)
     {
 
+        services.AddSerilogLogger(configuration, logging);
         services.AddScoped<ServicoContato>();
         services.AddScoped<ServicoCompromisso>();
         services.AddScoped<ServicoCategoria>();
