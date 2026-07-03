@@ -1,3 +1,4 @@
+```cshtml
 @{
     Layout = "_Layout";
     ViewBag.Titulo = "Listagem de Tarefas";
@@ -5,73 +6,112 @@
 
 @model List<ListarTarefasViewModel>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="fs-3 text-primary fw-semibold">@ViewBag.Titulo</h1>
-
-    <a class="btn btn-primary rounded-pill px-4" asp-action="Cadastrar">
-        Cadastrar
-    </a>
-</div>
+<a class="btn btn-outline-primary rounded-pill px-4 mb-3" asp-action="Cadastrar">
+    Cadastrar
+</a>
 
 @if (TempData["MensagemErro"] is string mensagemErro)
 {
-    <div class="alert alert-danger">@mensagemErro</div>
+    <div class="alert alert-danger border-start border-danger border-4 rounded-3" role="alert">
+        @mensagemErro
+    </div>
 }
 
 <div class="d-flex flex-wrap gap-2 mb-4">
-    <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar">Todas</a>
-    <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar" asp-route-filtro="pendentes">Pendentes</a>
-    <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar"
-       asp-route-filtro="concluidas">Concluidas</a>
+    <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar">
+        Todas
+    </a>
+
+    <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar" asp-route-filtro="pendentes">
+        Pendentes
+    </a>
+
+    <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar" asp-route-filtro="concluidas">
+        Concluídas
+    </a>
+
     <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar" asp-route-filtro="prioridade"
-       asp-route-prioridade="Alta">Alta</a>
+       asp-route-prioridade="Alta">
+        Alta
+    </a>
+
     <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar" asp-route-filtro="prioridade"
-       asp-route-prioridade="Normal">Normal</a>
+       asp-route-prioridade="Normal">
+        Normal
+    </a>
+
     <a class="btn btn-outline-primary rounded-pill px-3" asp-action="Listar" asp-route-filtro="prioridade"
-       asp-route-prioridade="Baixa">Baixa</a>
+       asp-route-prioridade="Baixa">
+        Baixa
+    </a>
 </div>
 
-<div class="card border-primary-subtle shadow-sm">
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-primary">
-                <tr>
-                    <th>Titulo</th>
-                    <th>Prioridade</th>
-                    <th>Status</th>
-                    <th>Percentual</th>
-                    <th class="text-end">Acoes</th>
-                </tr>
-            </thead>
+@if (!Model.Any())
+{
+    <div class="alert alert-primary border-start border-primary border-2 rounded-3" role="alert">
+        Nenhuma tarefa cadastrada.
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-2">
+        @foreach (var t in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
 
-            <tbody>
-                @foreach (var tarefa in Model)
-                {
-                    <tr>
-                        <td>@tarefa.Titulo</td>
-                        <td>@tarefa.Prioridade</td>
-                        <td>@(tarefa.Concluida ? "Concluida" : "Pendente")</td>
-                        <td>
-                            <div class="progress" style="height: 22px;">
-                                <div class="progress-bar" style="width: @tarefa.PercentualConcluido%">
-                                    @tarefa.PercentualConcluido.ToString("0")%
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5 class="card-title mb-0">@t.Titulo</h5>
+                            <span class="badge text-bg-primary rounded-pill">#@t.Id</span>
+                        </div>
+
+                        <dl class="row g-2 mb-4">
+
+                            <dt class="col-5 text-secondary fw-semibold">
+                                Prioridade
+                            </dt>
+                            <dd class="col-7 mb-0">
+                                @t.Prioridade
+                            </dd>
+
+                            <dt class="col-5 text-secondary fw-semibold">
+                                Status
+                            </dt>
+                            <dd class="col-7 mb-0">
+                                @(t.Concluida ? "Concluída" : "Pendente")
+                            </dd>
+
+                            <dt class="col-12 text-secondary fw-semibold">
+                                Progresso
+                            </dt>
+
+                            <dd class="col-12 mb-0">
+                                <div class="progress" style="height:22px;">
+                                    <div class="progress-bar" style="width:@t.PercentualConcluido%">
+                                        @t.PercentualConcluido.ToString("0")%
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="text-end">
+                            </dd>
+
+                        </dl>
+
+                        <div class="d-flex flex-wrap gap-2 justify-content-end mt-auto">
                             <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="Editar"
-                               asp-route-id="@tarefa.Id">
+                               asp-route-id="@t.Id">
                                 Editar
                             </a>
 
-                            <a class="btn btn-outline-danger btn-sm rounded-pill px-3" asp-action="Excluir"
-                               asp-route-id="@tarefa.Id">
+                            <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="Excluir"
+                               asp-route-id="@t.Id">
                                 Excluir
                             </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-</div>
+}
+```

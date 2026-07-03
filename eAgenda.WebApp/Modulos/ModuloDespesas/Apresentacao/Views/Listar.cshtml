@@ -1,52 +1,81 @@
 @model List<eAgenda.WebApp.Modulos.ModuloDespesas.Apresentacao.ListarDespesaViewModel>
 
 @{
+    Layout = "_Layout";
     ViewBag.Titulo = "Despesas";
 }
 
-<div class="d-flex justify-content-end mb-3">
-    <a class="btn btn-primary" asp-controller="Despesa" asp-action="Cadastrar">Cadastrar Despesa</a>
-</div>
+<a class="btn btn-outline-primary rounded-pill px-4 mb-3" asp-controller="Despesa" asp-action="Cadastrar">
+    Cadastrar Despesa
+</a>
+
+@if (TempData["MensagemErro"] is string mensagemErro)
+{
+    <div class="alert alert-danger border-start border-danger border-4 rounded-3" role="alert">
+        @mensagemErro
+    </div>
+}
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">
+    <div class="alert alert-primary border-start border-primary border-2 rounded-3" role="alert">
         Nenhuma despesa cadastrada.
     </div>
 }
 else
 {
-    <table class="table table-striped table-hover align-middle">
-        <thead>
-            <tr>
-                <th>Descrição</th>
-                <th>Data</th>
-                <th>Valor</th>
-                <th>Forma de Pagamento</th>
-                <th class="text-end">Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var despesa in Model)
-            {
-                <tr>
-                    <td>@despesa.Descricao</td>
-                    <td>@despesa.DataOcorrencia.ToString("dd/MM/yyyy")</td>
-                    <td>@despesa.Valor.ToString("C")</td>
-                    <td>@despesa.FormaPagamento.ToString()</td>
-                    <td class="text-end">
-                        <a class="btn btn-outline-primary btn-sm" asp-controller="Despesa" asp-action="Editar"
-                           asp-route-id="@despesa.Id">
-                            Editar
-                        </a>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-2">
+        @foreach (var d in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
 
-                        <a class="btn btn-outline-danger btn-sm" asp-controller="Despesa" asp-action="Excluir"
-                           asp-route-id="@despesa.Id">
-                            Excluir
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5 class="card-title mb-0">@d.Descricao</h5>
+                            <span class="badge text-bg-primary rounded-pill">#@d.Id</span>
+                        </div>
+
+                        <dl class="row g-2 mb-4">
+
+                            <dt class="col-5 text-secondary fw-semibold">
+                                Data
+                            </dt>
+                            <dd class="col-7 mb-0">
+                                @d.DataOcorrencia.ToString("dd/MM/yyyy")
+                            </dd>
+
+                            <dt class="col-5 text-secondary fw-semibold">
+                                Valor
+                            </dt>
+                            <dd class="col-7 mb-0">
+                                @d.Valor.ToString("C")
+                            </dd>
+
+                            <dt class="col-5 text-secondary fw-semibold">
+                                Pagamento
+                            </dt>
+                            <dd class="col-7 mb-0 text-break">
+                                @d.FormaPagamento
+                            </dd>
+
+                        </dl>
+
+                        <div class="d-flex flex-wrap gap-2 justify-content-end mt-auto">
+                            <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-controller="Despesa"
+                               asp-action="Editar" asp-route-id="@d.Id">
+                                Editar
+                            </a>
+
+                            <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-controller="Despesa"
+                               asp-action="Excluir" asp-route-id="@d.Id">
+                                Excluir
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }

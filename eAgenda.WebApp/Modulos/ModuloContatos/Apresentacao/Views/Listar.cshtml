@@ -1,4 +1,5 @@
 @using eAgenda.WebApp.Modulos.ModuloContatos.Apresentacao
+
 @{
     Layout = "_Layout";
     ViewBag.Titulo = "Listagem de Contatos";
@@ -6,52 +7,70 @@
 
 @model List<ListarContatosViewModel>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="fs-3 text-primary fw-semibold">@ViewBag.Titulo</h1>
-
-    <a class="btn btn-primary rounded-pill px-4" asp-action="Cadastrar">
-        Cadastrar
-    </a>
-</div>
+<a class="btn btn-outline-primary rounded-pill px-4 mb-3" asp-action="Cadastrar">
+    Cadastrar
+</a>
 
 @if (TempData["MensagemErro"] is string mensagemErro)
 {
-    <div class="alert alert-danger">@mensagemErro</div>
+    <div class="alert alert-danger border-start border-danger border-4 rounded-3" role="alert">
+        @mensagemErro
+    </div>
 }
 
-<div class="card border-primary-subtle shadow-sm">
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-primary">
-                <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Telefone</th>
-                    <th class="text-end">Acoes</th>
-                </tr>
-            </thead>
+@if (!Model.Any())
+{
+    <div class="alert alert-primary border-start border-primary border-2 rounded-3" role="alert">
+        Nenhum contato cadastrado.
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-2">
+        @foreach (var c in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
 
-            <tbody>
-                @foreach (var contato in Model)
-                {
-                    <tr>
-                        <td>@contato.Nome</td>
-                        <td>@contato.Email</td>
-                        <td>@contato.Telefone</td>
-                        <td class="text-end">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5 class="card-title mb-0">@c.Nome</h5>
+                            <span class="badge text-bg-primary rounded-pill">#@c.Id</span>
+                        </div>
+
+                        <dl class="row g-2 mb-4">
+
+                            <dt class="col-5 text-secondary fw-semibold">
+                                Email
+                            </dt>
+                            <dd class="col-7 mb-0 text-break">
+                                @c.Email
+                            </dd>
+
+                            <dt class="col-5 text-secondary fw-semibold">
+                                Telefone
+                            </dt>
+                            <dd class="col-7 mb-0">
+                                @c.Telefone
+                            </dd>
+
+                        </dl>
+
+                        <div class="d-flex flex-wrap gap-2 justify-content-end mt-auto">
                             <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="Editar"
-                               asp-route-id="@contato.Id">
+                               asp-route-id="@c.Id">
                                 Editar
                             </a>
 
-                            <a class="btn btn-outline-danger btn-sm rounded-pill px-3" asp-action="Excluir"
-                               asp-route-id="@contato.Id">
+                            <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="Excluir"
+                               asp-route-id="@c.Id">
                                 Excluir
                             </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-</div>
+}
