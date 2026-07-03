@@ -14,7 +14,7 @@ public class CompromissoController : Controller
     private readonly ServicoContato servicoContato;
     private readonly IMapper mapeador;
 
-    public CompromissoController(ServicoCompromisso servicoCompromisso, IMapper mapeador)
+    public CompromissoController(ServicoCompromisso servicoCompromisso, ServicoContato servicoContato, IMapper mapeador)
     {
         this.servicoCompromisso = servicoCompromisso;
         this.servicoContato = servicoContato;

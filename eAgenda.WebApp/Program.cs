@@ -24,8 +24,6 @@ app.MapMethods("/health", new[] { "HEAD" }, () =>
     return Results.Ok();
 });
 
-app.UseStaticFiles();
-
 app.UseRouting();
 
 app.MapDefaultControllerRoute();
