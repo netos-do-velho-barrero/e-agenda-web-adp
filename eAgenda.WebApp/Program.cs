@@ -18,6 +18,12 @@ builder.Services.AddPresentationConfig(builder.Configuration);
 
 var app = builder.Build();
 
+app.MapMethods("/health", new[] { "HEAD" }, () =>
+{
+    // Sem corpo na resposta (HEAD)
+    return Results.Ok();
+});
+
 app.UseStaticFiles();
 
 app.UseRouting();
