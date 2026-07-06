@@ -11,6 +11,8 @@
 
 ---
 
+![](eagenda.gif)
+
 ## 👥 Desenvolvedores
 
 <table>
