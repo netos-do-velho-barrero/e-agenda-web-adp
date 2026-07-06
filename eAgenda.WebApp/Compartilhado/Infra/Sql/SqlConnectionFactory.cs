@@ -9,7 +9,7 @@ public interface ISqlConnectionFactory
 
 public sealed class SqlConnectionFactory(IConfiguration configuration) : ISqlConnectionFactory
 {
-    private const string NomeConnectionString = "eAgendaDb";
+    public const string NomeConnectionString = "SqlServer";
 
     public SqlConnection CreateConnection()
     {
