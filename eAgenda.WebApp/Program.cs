@@ -2,7 +2,6 @@ using eAgenda.WebApp.Compartilhado.Aplicacao;
 using eAgenda.WebApp.Compartilhado.Apresentacao;
 using eAgenda.WebApp.Compartilhado.Infra;
 using eAgenda.WebApp.Compartilhado.Infra.Sql;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,11 +22,7 @@ builder.Services.AddHealthChecks()
 
 var app = builder.Build();
 
-app.MapMethods("/health", new[] { "HEAD" }, () =>
-{
-    // Sem corpo na resposta (HEAD)
-    return Results.Ok();
-});
+app.MapHealthChecks("/health");
 
 app.UseRouting();
 
